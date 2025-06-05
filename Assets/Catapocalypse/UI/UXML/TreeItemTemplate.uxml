@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <ui:VisualElement class="layerItemContainer" style="flex-grow: 0; flex-direction: row; -unity-text-align: middle-left;">
+        <ui:Label text="Forest Dense" name="layerName" />
+        <ui:Label text="Opacity: 100%" name="layerPersistence" class="Label faded h5" />
+    </ui:VisualElement>
+</ui:UXML>
