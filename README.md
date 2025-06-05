@@ -1,135 +1,145 @@
-# 🏰 Catapocalypse — A 4X RTS Survival Game
+# 🐾 Catapocalypse — A Cozy 4X RTS Survival About Smart Cats and Stinky Zombies
 
 **Status:** In Development  
 **Engine:** Unity (DOTS / ECS)  
-**Inspired By:** *They Are Billions*, *Age of Empires*, *Endless Legend*, *Frostpunk*
+**Genre:** Cute 3D RTS / 4X Survival  
+**Tone:** Wholesome with a hint of horror  
+**Inspired By:** *They Are Billions*, *The Settlers*, *Don’t Starve*, *Stray*
 
 ---
 
-## 📜 About the Game
+## 🐱 What is Catapocalypse?
 
-**[Game Title]** is a hybrid **4X (eXplore, eXpand, eXploit, eXterminate)** and **RTS survival** game set in a dying world. Lead your last bastion of civilization against overwhelming threats, manage resources, build defenses, research technologies, and explore the world — all while surviving increasingly brutal waves of enemies.
+In **Catapocalypse**, you lead a colony of intelligent, industrious cats who are trying to build a new home in a world overrun by zombies. But there’s a twist: zombies are drawn to **sound and smell** — and cats are *not great at hiding either*. 😸
+
+Build, gather, purr, and fight to survive. Manage how your town smells and sounds, or the undead will sniff you out.
 
 ---
 
-## ⚙️ Core Features (Planned)
+## 🎮 Key Features
 
-- 🏗️ **Base Building & Management**  
-  Design efficient cities under constant threat, balancing growth with defense.
+- 🏗️ **Town Building with Cat-charm**  
+  Place cozy homes, workshops, fish kitchens, and meow-tastic defense towers.
 
-- 🧠 **Evolving AI Enemies**  
-  Face hordes that adapt and escalate with your progress.
+- 🧻 **Smell & Sound Management**  
+  Every building emits smell and noise — plan your layout to stay undetected.
 
-- 🌍 **Fog of War + World Exploration**  
-  Scout ruins, recover lost tech, and reveal the secrets of the world.
+- 🐟 **Resource Gathering & Logistics**  
+  Send cats to gather wood, stone, fish, yarn, and other vital supplies. Manage stockpiles carefully.
 
-- 🔬 **Tech Tree & Research**  
-  Choose between survival tools, military might, or civic improvements.
+- 🧟 **Zombies with Noses and Ears**  
+  The undead wander the land — and are attracted by your activities.
 
-- 🧱 **Resource Management & Logistics**  
-  Mine, harvest, and process with limited manpower and infrastructure.
+- 🎓 **Upgrades & Tech Tree**  
+  Research cat-themed advancements like “Silent Steps,” “Lavender Air Fresheners,” or “Meowtrition.”
 
-- 🧭 **4X Layer Mechanics**  
-  Diplomacy (optional), territory expansion, and strategic control.
+- 🐾 **Cute, Expressive 3D Style**  
+  Hand-animated cats, stylized world, and expressive buildings.
+
+- 🧭 **Explore and Expand**  
+  Venture beyond your fur-st walls to reclaim the land, rescue lost cats, and discover ancient cat-tech.
 
 ---
 
 ## 🧪 Current Development Status
 
-| Feature                     | Status     |
-|----------------------------|------------|
-| Core ECS-based Engine      | ✅ In Progress |
-| Basic Base Building        | ✅ Prototype |
-| Enemy Wave System          | 🚧 Early Implementation |
-| Tech Tree & Upgrades       | ⏳ Planned |
-| World Map / Exploration    | ⏳ Planned |
-| UI / UX                    | 🚧 Work in Progress |
-| Save / Load System         | ⏳ Not Implemented |
-| Sound & Music              | ⏳ Placeholder |
-| Art & Assets               | ⏳ Greyboxed |
+| Feature                          | Status           |
+|----------------------------------|------------------|
+| Basic Base Building              | ✅ Prototype      |
+| Smell & Sound System             | ✅ In Progress    |
+| Zombie AI with Detection         | 🚧 Early Stage    |
+| Resource Gathering & Logistics   | ✅ Prototype      |
+| Tech Tree                        | ⏳ Not Yet        |
+| World Exploration                | ⏳ Not Yet        |
+| Art Style & Models               | ✅ Placeholder    |
+| UI / UX                          | 🚧 Early Stage    |
+| Save / Load System               | ⏳ Not Implemented|
+| Music / SFX                      | 🚧 WIP            |
 
 ---
 
-## 🎮 How to Play (Prototype)
+## 🐾 How to Play (Prototype)
 
 1. Clone this repo.
-2. Open in Unity 2023+ with DOTS support.
-3. Play the `MainScene` to start the current test environment.
+2. Open the project in **Unity 2023+** with DOTS support.
+3. Launch the `CatapocalypseScene`.
 4. Controls:
    - WASD / Mouse: Move camera
-   - Left-click: Select / build
-   - Right-click: Interact / move units
-   - `Esc`: Pause Menu
+   - Left-click: Select cats or buildings
+   - Right-click: Assign tasks
+   - `Esc`: Pause menu / options
 
 ---
 
-## 🧠 Design Pillars
+## 💡 Core Design Pillars
 
-- **Tension-Driven Gameplay:** Every decision matters — overextend and you might fall.
-- **Systemic Depth:** Mechanics interact in layered, emergent ways.
-- **Strategic Expression:** Multiple viable strategies for survival and victory.
-
----
-
-## 🗺️ World & Lore (WIP)
-
-Humanity clings to survival in the ashes of a fallen empire. Something in the dark is stirring, and your outpost may be the last hope — or the final tombstone.
+- **Adorable, Not Idle:** It's cute, but decisions matter.
+- **Systemic Tension:** Managing smell, sound, and survival simultaneously.
+- **Strategic Zen:** Find calm in chaos as you build your purrfect settlement.
 
 ---
 
-## 📸 Screenshots / Dev GIFs
+## 🐈 World & Lore
 
-*Coming soon.*
+After the fall of human civilization, only the cleverest cats survived. Banding together, they seek to build a new life — one full of naps, snacks, and safety. But the zombies are always out there, sniffing and groaning…
+
+---
+
+## 📸 Screenshots / Dev Art
+
+*(Coming soon: concept art, WIP models, gifs of cats dropping fish.)*
 
 ---
 
 ## 🔧 Tech Stack
 
-- Unity DOTS / ECS
-- Burst Compiler + Jobs System
-- (Optional) Compute Shaders for gas simulation, fog of war, etc.
-- Custom Simulation Layer
-- Git for version control
+- Unity + DOTS / ECS
+- Custom Smell & Sound Simulation (CPU + GPU)
+- Burst Jobs for performance
+- Stylized shader pipeline for cozy visuals
 
 ---
 
-## 💬 Feedback & Contributions
+## 📅 Roadmap
 
-**This project is closed-source for now, but we're open to feedback!**  
-If you’d like to test builds or give design suggestions, reach out via:
-
-- [Discord](#) (coming soon)
-- [Twitter](#) or [Itch.io page](#)
-
----
-
-## 📅 Roadmap Highlights
-
-- ✅ Graybox prototyping
-- 🔜 Tech Tree + Unit AI
-- 🔜 First public demo (Alpha)
-- 🔜 World map layer with exploration
-- 🔜 Steam Early Access target (TBD)
+- ✅ Core Smell/Noise Detection System
+- ✅ Resource Transport System (Cat Haulers)
+- 🔜 Defense Mechanics & Towers
+- 🔜 Tech Tree + Upgrade UI
+- 🔜 Alpha Demo (Itch.io)
+- 🔜 Steam Early Access target
 
 ---
 
 ## 🧩 Known Issues
 
 - UI is placeholder
-- AI pathfinding is basic
-- Balance not yet tuned
-- Save/load not implemented
+- Zombie AI still in “sniff & shuffle” mode
+- No proper balance yet
+- Missing animations for cat chores
+
+---
+
+## 🐾 Follow Development
+
+We’re building this with love and would love your feedback!
+
+- 💬 [Discord](#)
+- 🎨 [Itch.io Devlog](#)
+- 🐦 [Twitter / X](#)
 
 ---
 
 ## 📃 License
 
-This project is under development and not yet licensed for public use. All assets and code © [Your Studio Name].
+This project is currently closed-source. All content © [Your Studio Name].
 
 ---
 
-## ❤️ Support the Devs
+## ❤️ Support the Cats
 
-If you want to help us stay caffeinated or boost development:
+If you love the idea of strategic cute chaos, consider supporting development!
+
 - ☕ [Buy us a coffee](#)
-- 💬 Share the project!
+- 🐾 Wishlist on Steam (soon)
+- 🧵 Share on social media
