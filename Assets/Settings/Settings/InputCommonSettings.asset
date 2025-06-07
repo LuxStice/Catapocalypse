@@ -16,8 +16,10 @@ MonoBehaviour:
   defaultEnabled:
   - UI
   - Input
+  - Prefab System
   cursorPosition: {fileID: -5630151704836100654, guid: 35845fe01580c41289b024647b1d1c53, type: 3}
-  settings: []
+  settings:
+  - rid: 7713484319933858159
   debugSettings:
   - rid: 7713484266356867437
   references:
@@ -29,3 +31,10 @@ MonoBehaviour:
         Name: InputCoreDebug
         TimeScaleDouble: {fileID: 7476244043514120974, guid: 35845fe01580c41289b024647b1d1c53, type: 3}
         TimeScaleHalve: {fileID: 2411907206095950430, guid: 35845fe01580c41289b024647b1d1c53, type: 3}
+    - rid: 7713484319933858159
+      type: {class: InputData/Settings, ns: Catapocalypse.ECS.PrefabSystem, asm: Catapocalypse.ECS}
+      data:
+        Name: InputData
+        SpawnPrefabDown: {fileID: 7165503659021440977, guid: 35845fe01580c41289b024647b1d1c53, type: 3}
+        SpawnPrefab: {fileID: 0}
+        SpawnPrefabUp: {fileID: 0}

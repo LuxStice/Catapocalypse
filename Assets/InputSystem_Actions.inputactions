@@ -1010,6 +1010,45 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Prefab System",
+            "id": "2c726f66-25b0-4204-a991-bd3670a9ccb8",
+            "actions": [
+                {
+                    "name": "SpawnPrefab",
+                    "type": "Button",
+                    "id": "d1693705-5c0c-453d-9367-677bc466a114",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "3a343248-4101-4b3d-bb47-ca79332e6479",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SpawnPrefab",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "807bbf53-4dfb-49ae-a6a3-0220606f112f",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SpawnPrefab",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [
