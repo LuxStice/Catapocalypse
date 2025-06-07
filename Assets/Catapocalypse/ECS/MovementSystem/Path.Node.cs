@@ -8,7 +8,15 @@ namespace Catapocalypse.ECS.MovementSystem
     {
         public struct Node : IBufferElementData
         {
+            public Type NodeType;
             public float3 Value;
+            public Entity Entity;
+
+            public enum Type
+            {
+                Position,
+                Entity
+            }
         }
     }
 }

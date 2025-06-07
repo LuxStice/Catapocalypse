@@ -3,6 +3,7 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
+using Unity.Transforms;
 using UnityEngine;
 
 namespace Catapocalypse.ECS.MovementSystem
@@ -13,6 +14,7 @@ namespace Catapocalypse.ECS.MovementSystem
     {
         private EntityQuery query;
         private ComponentLookup<PathSeeker> pathLookup;
+        private ComponentLookup<LocalTransform> localTransformLookup;
         private BufferLookup<Path.Node> pathNodeLookup;
         
         [BurstCompile]
@@ -27,6 +29,7 @@ namespace Catapocalypse.ECS.MovementSystem
             query = state.GetEntityQuery(queryDesc);
 
             pathLookup = SystemAPI.GetComponentLookup<PathSeeker>();
+            localTransformLookup = SystemAPI.GetComponentLookup<LocalTransform>();
             pathNodeLookup = SystemAPI.GetBufferLookup<Path.Node>();
             
             state.RequireForUpdate<EndInitializationEntityCommandBufferSystem.Singleton>();
@@ -42,12 +45,14 @@ namespace Catapocalypse.ECS.MovementSystem
             
             var ecb = SystemAPI.GetSingleton<EndInitializationEntityCommandBufferSystem.Singleton>()
                 .CreateCommandBuffer(state.WorldUnmanaged);
+            localTransformLookup.Update(ref state);
 
             var job = new UpdatePathStateJob
             {
                 Entities = entities.AsReadOnly(),
                 PathNodesLookup = pathNodeLookup,
                 PathLookup = pathLookup,
+                TransformLookup = localTransformLookup,
                 ecb = ecb.AsParallelWriter()
             }.Schedule(entities.Length, 32, state.Dependency);
             
@@ -69,6 +74,7 @@ namespace Catapocalypse.ECS.MovementSystem
             
             [ReadOnly] public BufferLookup<Path.Node> PathNodesLookup;
             [ReadOnly] public ComponentLookup<PathSeeker> PathLookup;
+            [ReadOnly] public ComponentLookup<LocalTransform> TransformLookup;
 
             public EntityCommandBuffer.ParallelWriter ecb;
             
@@ -79,14 +85,25 @@ namespace Catapocalypse.ECS.MovementSystem
                 var nodes = PathNodesLookup[entity];
                 var hasNodes = !nodes.IsEmpty;
                 var isComponentEnabled = PathLookup.IsComponentEnabled(entity);
+                var transform = TransformLookup[entity];
 
                 if (isComponentEnabled != hasNodes)
                     ecb.SetComponentEnabled<PathSeeker>(index, entity, hasNodes);
+
+                float distanceToNextNode = (!nodes.IsEmpty) ? math.distance(transform.Position, nodes[0].Value) : -1;
+                float distanceToFinalNode = distanceToNextNode; 
+
+                for (int i = 1; i < nodes.Length-1; i++)
+                {
+                    distanceToNextNode += math.distance(nodes[1].Value, nodes[i+1].Value);
+                }
                 
                 ecb.SetComponent(index, entity, new PathSeeker.State
                 {
                     CurrentNodePosition = (!nodes.IsEmpty) ? nodes[0].Value : float3.zero,
-                    NextNodePosition = (nodes.Length >= 2) ? nodes[1].Value : float3.zero
+                    NextNodePosition = (nodes.Length >= 2) ? nodes[1].Value : float3.zero,
+                    DistanceToNextNode = distanceToNextNode,
+                    DistanceToFinalNode = distanceToFinalNode
                 });
             }
         }
