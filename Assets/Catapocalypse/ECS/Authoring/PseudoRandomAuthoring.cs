@@ -22,15 +22,7 @@ namespace Catapocalypse.ECS
 
         private void OnValidate()
         {
-            seed = GetNewSeed();
-        }
-
-        public static uint GetNewSeed()
-        {
-            var seed = ((uint)UnityEngine.Random.Range(0, 65536) << 16) | (uint)UnityEngine.Random.Range(0, 65536);
-            
-            seed += int.MaxValue;
-            return seed;
+            seed = Pseudorandom.GetNewSeed();
         }
     }
 }

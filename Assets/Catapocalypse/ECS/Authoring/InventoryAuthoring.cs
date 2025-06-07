@@ -5,16 +5,14 @@ namespace Catapocalypse.ECS.InventorySystem
 {
     public class InventoryAuthoring : MonoBehaviour
     {
-        [Range(0, 1024)]
-        public uint Size = 64;
+        public double Capacity = 64;
         
         public class InventoryDataBaker : Baker<InventoryAuthoring>
         {
             public override void Bake(InventoryAuthoring authoring)
             {
                 var entity = GetEntity(TransformUsageFlags.Dynamic);
-                AddComponent(entity, new Inventory { Size = authoring.Size });
-                AddComponent(entity, new Inventory.State());
+                AddComponent(entity, new Inventory { Capacity = authoring.Capacity });
                 AddBuffer<Inventory.Item>(entity);
             }
         }
