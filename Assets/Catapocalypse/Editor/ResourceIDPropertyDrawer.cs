@@ -11,23 +11,30 @@ namespace Catapocalypse.ECS.Editor
     [CustomPropertyDrawer(typeof(ResourceID))]
     public class ResourceIDPropertyDrawer : PropertyDrawer
     {
-
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
+            var value = (ResourceID)property.boxedValue;
+
             if (property.propertyPath == "m_ResourceID")
             {
                 return base.CreatePropertyGUI(property);
             }
-            
+
             VisualElement container = new VisualElement();
-            
-            if (!TryGetResourceDatabase(out var database))
+
+            if (!Extensions.TryGetAsset<ResourceDatabase>(out var database))
                 return new Label("Error");
-            
+
             var choices = database.resourcesById.Select(kvp => $"{kvp.Key.InternalID:00} - {kvp.Value.Name}").ToList();
             var dropdown = new DropdownField(nameof(ResourceID))
             {
                 choices = choices,
+                value = choices.Find(s =>
+                {
+                    var id = new ResourceID(uint.Parse(s[..2]));
+
+                    return id == value;
+                })
             };
             dropdown.RegisterValueChangedCallback(evt =>
             {
@@ -35,17 +42,22 @@ namespace Catapocalypse.ECS.Editor
                 var resourceID = new ResourceID(uint.Parse(id));
 
                 property.boxedValue = resourceID;
+                property.serializedObject.ApplyModifiedProperties();
+                EditorUtility.SetDirty(property.serializedObject.targetObject);
             });
             container.Add(dropdown);
-            
+
             return container;
         }
-        
-        private static bool TryGetResourceDatabase(out ResourceDatabase result)
+    }
+
+    public static class Extensions
+    {
+        public static bool TryGetAsset<T>(out T result) where T : UnityEngine.Object
         {
             result = null;
-            
-            var guids = AssetDatabase.FindAssets("t:ResourceDatabase");
+
+            var guids = AssetDatabase.FindAssets($"t:{typeof(T)}");
             if (guids.Length == 0)
             {
                 Debug.LogWarning("No ResourceDatabase asset found.");
@@ -53,7 +65,7 @@ namespace Catapocalypse.ECS.Editor
             }
 
             var path = AssetDatabase.GUIDToAssetPath(guids[0]);
-            result = AssetDatabase.LoadAssetAtPath<ResourceDatabase>(path);
+            result = AssetDatabase.LoadAssetAtPath<T>(path);
 
             if (result == null)
             {
@@ -63,6 +75,5 @@ namespace Catapocalypse.ECS.Editor
 
             return true;
         }
-        
     }
 }
