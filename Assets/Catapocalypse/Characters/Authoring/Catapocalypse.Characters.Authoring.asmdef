@@ -1,0 +1,14 @@
+﻿{
+  "name": "Catapocalypse.Characters.Authoring",
+  "references": [
+    "Catapocalypse.Core",
+    "Catapocalypse.Characters",
+    "Unity.Entities",
+    "Unity.Entities.Hybrid",
+    "Unity.Collections",
+    "Unity.Burst",
+    "Unity.Mathematics",
+    "Unity.Entities.Graphics",
+    "BovineLabs.Core"
+  ]
+}

@@ -1,7 +1,0 @@
-﻿{
-  "name": "Catapocalypse.Editor",
-  "references": [
-    "Catapocalypse.Core",
-    "Catapocalypse.ECS"
-  ]
-}

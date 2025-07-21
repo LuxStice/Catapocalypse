@@ -1,0 +1,14 @@
+﻿{
+  "name": "Catapocalypse.Terrain.Authoring",
+  "references": [
+    "Catapocalypse.Core",
+    "Catapocalypse.Terrain",
+    "Unity.Entities",
+    "Unity.Entities.Hybrid",
+    "Unity.Collections",
+    "Unity.Burst",
+    "Unity.Mathematics",
+    "Unity.Entities.Graphics",
+    "BovineLabs.Core"
+  ]
+}

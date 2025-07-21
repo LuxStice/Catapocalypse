@@ -1,16 +1,11 @@
 {
     "name": "Catapocalypse.Core",
-    "rootNamespace": "",
     "references": [
-        "GUID:2665a8d13d1b3f18800f46e256720795"
-    ],
-    "includePlatforms": [],
-    "excludePlatforms": [],
-    "allowUnsafeCode": false,
-    "overrideReferences": false,
-    "precompiledReferences": [],
-    "autoReferenced": true,
-    "defineConstraints": [],
-    "versionDefines": [],
-    "noEngineReferences": false
+        "Unity.Entities",
+        "Unity.Collections",
+        "Unity.Burst",
+        "Unity.Mathematics",
+        "Unity.Entities.Graphics",
+        "BovineLabs.Core"
+    ]
 }

@@ -1,0 +1,161 @@
+﻿#pragma kernel GenerateMesh
+
+// Terrain Settings
+float _IsoLevel;
+float _VoxelSize;
+int3 _ChunkSize;
+float3 _ChunkOffset;
+
+// Buffers
+RWStructuredBuffer<float3> Vertices;
+RWStructuredBuffer<int> Triangles;
+RWStructuredBuffer<int> VertexCount;
+RWStructuredBuffer<int> TriangleCount;
+
+// ------------------------------------------
+// Hash-based pseudo-noise
+float hash(float3 p) {
+    return frac(sin(dot(p, float3(127.1, 311.7, 74.7))) * 43758.5453);
+}
+
+float3 fade(float3 t) {
+    return t * t * t * (t * (t * 6 - 15) + 10);
+}
+
+float perlin3D(float3 p) {
+    float3 i = floor(p);
+    float3 f = frac(p);
+    float3 u = fade(f);
+
+    float n000 = hash(i + float3(0, 0, 0));
+    float n001 = hash(i + float3(0, 0, 1));
+    float n010 = hash(i + float3(0, 1, 0));
+    float n011 = hash(i + float3(0, 1, 1));
+    float n100 = hash(i + float3(1, 0, 0));
+    float n101 = hash(i + float3(1, 0, 1));
+    float n110 = hash(i + float3(1, 1, 0));
+    float n111 = hash(i + float3(1, 1, 1));
+
+    float nx00 = lerp(n000, n100, u.x);
+    float nx01 = lerp(n001, n101, u.x);
+    float nx10 = lerp(n010, n110, u.x);
+    float nx11 = lerp(n011, n111, u.x);
+
+    float nxy0 = lerp(nx00, nx10, u.y);
+    float nxy1 = lerp(nx01, nx11, u.y);
+
+    return lerp(nxy0, nxy1, u.z);
+}
+
+float fbm(float3 pos, int octaves, float frequency, float amplitude)
+{
+    float value = 0;
+    for (int i = 0; i < octaves; i++)
+    {
+        value += perlin3D(pos * frequency) * amplitude;
+        pos *= 2.0;
+        amplitude *= 0.5;
+    }
+    return value;
+}
+
+// ------------------------------------------
+// Terrain Density Function
+float getTerrainDensity(float3 worldPos)
+{
+    float surfaceHeight = fbm(worldPos.xz, 5, 0.01, 1.0) * 32.0;
+    float terrain = surfaceHeight - worldPos.y;
+
+    float caveNoise = fbm(worldPos * 0.05, 4, 1.0, 1.0);
+    float caves = smoothstep(0.45, 0.55, caveNoise);
+
+    float finalDensity = terrain - caves * 15.0;
+
+    return finalDensity;
+}
+
+// ------------------------------------------
+// Marching Cubes Lookup Tables (simplified stub)
+#include "MarchingCubesTables.hlsl" // You must define `edgeTable[256]`, `triTable[256][16]`
+
+// Interpolates vertex on an edge
+float3 VertexInterp(float iso, float3 p1, float3 p2, float valp1, float valp2)
+{
+    float mu = (iso - valp1) / (valp2 - valp1);
+    return lerp(p1, p2, saturate(mu));
+}
+
+// ------------------------------------------
+// Main Kernel
+[numthreads(4, 4, 4)]
+void GenerateMesh(uint3 id : SV_DispatchThreadID)
+{
+    if (id.x >= _ChunkSize.x - 1 || id.y >= _ChunkSize.y - 1 || id.z >= _ChunkSize.z - 1) return;
+
+    float3 cubeCorner[8];
+    float cubeValue[8];
+
+    // Sample cube corners
+    for (int i = 0; i < 8; i++)
+    {
+        int3 cornerOffset = int3(i & 1, (i >> 1) & 1, (i >> 2) & 1);
+        float3 worldPos = (_ChunkOffset + (id + cornerOffset)) * _VoxelSize;
+
+        cubeCorner[i] = worldPos;
+        cubeValue[i] = getTerrainDensity(worldPos);
+    }
+
+    // Determine cube index
+    int cubeIndex = 0;
+    for (int i = 0; i < 8; i++)
+        if (cubeValue[i] < _IsoLevel) cubeIndex |= (1 << i);
+
+    if (edgeTable[cubeIndex] == 0) return;
+
+    // Find vertices where surface intersects cube
+    float3 vertList[12];
+
+    if ((edgeTable[cubeIndex] & 1) != 0)
+        vertList[0] = VertexInterp(_IsoLevel, cubeCorner[0], cubeCorner[1], cubeValue[0], cubeValue[1]);
+    if ((edgeTable[cubeIndex] & 2) != 0)
+        vertList[1] = VertexInterp(_IsoLevel, cubeCorner[1], cubeCorner[2], cubeValue[1], cubeValue[2]);
+    if ((edgeTable[cubeIndex] & 4) != 0)
+        vertList[2] = VertexInterp(_IsoLevel, cubeCorner[2], cubeCorner[3], cubeValue[2], cubeValue[3]);
+    if ((edgeTable[cubeIndex] & 8) != 0)
+        vertList[3] = VertexInterp(_IsoLevel, cubeCorner[3], cubeCorner[0], cubeValue[3], cubeValue[0]);
+
+    if ((edgeTable[cubeIndex] & 16) != 0)
+        vertList[4] = VertexInterp(_IsoLevel, cubeCorner[4], cubeCorner[5], cubeValue[4], cubeValue[5]);
+    if ((edgeTable[cubeIndex] & 32) != 0)
+        vertList[5] = VertexInterp(_IsoLevel, cubeCorner[5], cubeCorner[6], cubeValue[5], cubeValue[6]);
+    if ((edgeTable[cubeIndex] & 64) != 0)
+        vertList[6] = VertexInterp(_IsoLevel, cubeCorner[6], cubeCorner[7], cubeValue[6], cubeValue[7]);
+    if ((edgeTable[cubeIndex] & 128) != 0)
+        vertList[7] = VertexInterp(_IsoLevel, cubeCorner[7], cubeCorner[4], cubeValue[7], cubeValue[4]);
+
+    if ((edgeTable[cubeIndex] & 256) != 0)
+        vertList[8] = VertexInterp(_IsoLevel, cubeCorner[0], cubeCorner[4], cubeValue[0], cubeValue[4]);
+    if ((edgeTable[cubeIndex] & 512) != 0)
+        vertList[9] = VertexInterp(_IsoLevel, cubeCorner[1], cubeCorner[5], cubeValue[1], cubeValue[5]);
+    if ((edgeTable[cubeIndex] & 1024) != 0)
+        vertList[10] = VertexInterp(_IsoLevel, cubeCorner[2], cubeCorner[6], cubeValue[2], cubeValue[6]);
+    if ((edgeTable[cubeIndex] & 2048) != 0)
+        vertList[11] = VertexInterp(_IsoLevel, cubeCorner[3], cubeCorner[7], cubeValue[3], cubeValue[7]);
+
+    for (int i = 0; triTable[cubeIndex][i] != -1; i += 3)
+    {
+        int index = atomicadd(VertexCount[0], 3);
+
+        float3 v0 = vertList[triTable[cubeIndex][i]];
+        float3 v1 = vertList[triTable[cubeIndex][i + 1]];
+        float3 v2 = vertList[triTable[cubeIndex][i + 2]];
+
+        Vertices[index + 0] = v0;
+        Vertices[index + 1] = v1;
+        Vertices[index + 2] = v2;
+
+        Triangles[index + 0] = index + 0;
+        Triangles[index + 1] = index + 1;
+        Triangles[index + 2] = index + 2;
+    }
+}

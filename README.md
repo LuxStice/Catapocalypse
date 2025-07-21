@@ -1,9 +1,8 @@
 # 🐾 Catapocalypse — A Cozy 4X RTS Survival About Smart Cats and Stinky Zombies
 
 ![GitHub Repo Size](https://img.shields.io/github/repo-size/LuxStice/Catapocalypse)
-![GitHub Stars](https://img.shields.io/github/starsLuxStice/Catapocalypse?style=social)
-![Unity Version](https://img.shields.io/badge/engine-Unity%206.0.0-blue)
-![Development Status](https://img.shields.io/badge/status-in--development-yellow)
+![Unity Version](https://img.shields.io/badge/engine-Unity%206.1-white)
+![Development Status](https://img.shields.io/badge/status-planning-purple)
 ![License](https://img.shields.io/badge/license-Proprietary-red)
 
 **Status:** In Development  
